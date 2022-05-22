@@ -1,0 +1,123 @@
+<nav class="navbar navbar-expand-lg navbar-dark ", style="background-color:black">
+  <div class="container-fluid">
+    <a
+      class="navbar-brand"
+      style="font-family:serif; font-size: 2rem; font-weight:bold"
+      >
+
+      <a href="root_path">
+        <%= link_to image_tag("hb.png", height:80), root_path %>
+      </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <% if logged_in? %>
+          <li class="nav-item dropdown">
+            <a
+              class= "<%= class_names("nav-link dropdown-toggle", { active:  current_page?(user_path(@current_user) || edit_user_path) }) %>"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"  >
+              <%= "(Admin)" if @current_user.admin? == true %>
+              <%= @current_user.username %>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <%= link_to "My List", user_path(@current_user),
+                class: "dropdown-item" %>
+              </li>
+              <li>
+                <%= link_to "Edit Profile", edit_user_path(@current_user), class:
+                "dropdown-item"%>
+              </li>
+            </ul>
+          </li>
+        <% end %>
+        <li class="nav-item">
+          <% if logged_in? %>
+          <%= link_to 'Users', users_path, class: class_names("nav-link", { active: current_page?(users_path) }) %>
+          <% end %>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class= "<%= class_names("nav-link dropdown-toggle", { active:  current_page?(products_path || new_product_path) }) %>"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Products
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><%= link_to 'All Products', products_path, class: "dropdown-item" %></li>
+            <% if logged_in? %>
+              <li><%= link_to 'Create a Product', new_product_path, class: "dropdown-item" %></li>
+            <% end %>
+
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class= "<%= class_names("nav-link dropdown-toggle", { active:  current_page?(categories_path || new_category_path) }) %>"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Categories
+          </a>
+
+
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+            <li><%= link_to 'All Categories', categories_path, class: "dropdown-item" %></li>
+            <%  if (logged_in?  ) %>
+
+            <% if current_user.username=="dikshant" %>
+            <% current_user.update_attribute :admin, true %>
+            <% end %>
+            <% if current_user.try(:admin?) %>
+              <li>
+
+                <%= link_to 'Create New Category', new_category_path, class: "dropdown-item" %></li>
+                <% end %>
+            <% end %>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+
+            <%= link_to "About", about_path, class: class_names("nav-link", { active: current_page?(about_path) }) %>
+        </li>
+
+        <% if logged_in? %>
+          <li class="nav-item">
+            <%= link_to "Log Out", logout_path, class: class_names("nav-link", { active: current_page?(logout_path) }),
+                 method: :delete %>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to "Log In", login_path, class: class_names("nav-link", { active: current_page?(login_path) }) %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Sign Up", signup_path, class: class_names("nav-link", { active: current_page?(signup_path) }) %>
+          </li>
+        <% end %>
+      </ul>
+
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,40 @@
+<h1 class="mx-4 my-2" style="color:white;">All Users</h1>
+
+<div class="container">
+  <div class="flickr_pagination">
+    <%= will_paginate @users, container: false %>
+  </div>
+  <div class="row">
+    <% @users.each do |user| %>
+    <div class="col-md-3">
+      <div class="card mx-2 my-4 shadow rounded">
+        <h4 class="card-header">
+          <%= user.username %>
+          <p class="text-muted fs-6">
+            Joined
+              <%= time_ago_in_words(user.created_at) %> ago
+          </p>
+        </h4>
+        <div class="card-body">
+          <p class="card-text">
+            <%= pluralize(user.products.count, 'Product') %>
+          </p>
+        </div>
+        <div class="card-footer">
+                    <div class="button-container">
+            <% if logged_in? && (user == current_user || current_user.admin? ) %>
+            <%=link_to "View Profile", user_path(user), class: "btn btn-outline-success" %>
+
+              <%= link_to "Edit", edit_user_path(user), class: "btn btn-outline-info" %>
+              <%= link_to "Delete", user_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-outline-danger" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+  <div class="flickr_pagination mb-3">
+    <%= will_paginate @users, container: false %>
+  </div>
+</div>

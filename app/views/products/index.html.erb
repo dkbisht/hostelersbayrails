@@ -1,0 +1,52 @@
+<h1 class="mx-4" style="color:white;">All Products</h1>
+<div class="container">
+  <div class="flickr_pagination ">
+    <%= will_paginate @products, container: false %>
+  </div>
+  <div class="row">
+  <% @products.each do |product| %>
+
+    <div class="col-md-3">
+      <div class="card my-1">
+
+        <%= image_tag(product.img_path, class: "card-img-top") %>
+        <div class="card-body">
+          <h5 class="card-title">
+            <%= product.name %>
+          </h5>
+          <h6 class="text-muted">
+            <%= product.seller %>
+          </h6>
+          <h6>
+            <strong><%= sprintf("Rs. %d", product.price ) %></strong>
+          </h6>
+          <% if product.categories.any? %>
+            <%= render product.categories %>
+          <% end %>
+          <div class="button-container">
+            <%=link_to "View", product_path(product), class: "btn btn-outline-success" %>
+
+
+            <% if logged_in?  %>
+
+                <% if current_user.products.include?(product) %>
+                  <%= link_to "/remove_product/" + product.id.to_s, method: :delete do %>
+                    <i class="bi bi-star-fill h3 float-end fav-full"></i>
+                  <% end %>
+                <% else %>
+                  <%= link_to "/add_product/" + product.id.to_s, method: :patch do %>
+                    <i class="bi bi-star h3 float-end fav-empty"></i>
+                  <% end %>
+                <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+  </div>
+    <div class="flickr_pagination mb-3">
+    <%= will_paginate @products, container: false %>
+    </div>
+</div>
